@@ -40,7 +40,7 @@ Benefits: It guarantees consistency. If the container runs correctly on a develo
 
 Strangler Fig Pattern: The most common migration strategy. Instead of a high-risk "rewrite everything from scratch," you slowly carve off small features from the monolith one by one and replace them with microservices. Eventually, the monolith shrinks down to nothing, "strangled" by the new microservices architecture.
 
-`````text
+````text
 
 Phase 1: Monolith Only       Phase 2: Carving Off        Phase 3: Fully Strangled
 ┌───────────────────────┐   ┌───────────────────────┐   ┌───────────────────────┐
@@ -53,7 +53,7 @@ Phase 1: Monolith Only       Phase 2: Carving Off        Phase 3: Fully Strangle
                             ┌───────────────────────┐   │  │ Auth │   │Billing│ │
                             │   New Auth Service    │   │  └──────┘   └───────┘ │
                             └───────────────────────┘   └───────────────────────┘
-````text
+**` ``` `**
 - **The Execution:** You construct a routing intermediary (like an API Gateway) in front of the application. One by one, you cut a specific domain out of the legacy monolith, rewrite it as an isolated microservice, and update the gateway to route traffic to the new service.
 - Over time, the monolith is progressively chipped away and shrunk down until it is entirely replaced—or "strangled"—by the new microservices architecture.
 
@@ -78,4 +78,4 @@ A system shouldn't wait for a user to report a bug before developers realize som
 
 - **Automated Alerting:** Setting up automated guardrails that actively scan metrics. If a critical metric passes a threshold (e.g., your API error rates cross `2%` or disk space reaches `90%`), the monitoring system instantly triggers high-priority alerts to on-call engineers via platforms like PagerDuty or Slack.
 - **Anomaly Detection:** Advanced monitoring setups establish a rolling baseline of standard system behaviors using historical data. If a metric acts highly unusual—such as a sudden, sharp drop in checkout transaction volume that doesn't trigger standard hardware errors—the anomaly detection controller immediately flags it as a potential silent outage.
-`````
+````
