@@ -11,19 +11,22 @@
          │ (Metadata/Search)      │ (Upload Video Chunks)  │ (Streaming Video Request)
          ▼                        ▼                        ▼
 
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│ Search & Recs │ │ Upload Service │ │ Google CDN │
-│ Services │ │ (Chunked API) │ │ (Edge Nodes) │
-└────────┬────────┘ └────────┬────────┘ └────────┬────────┘
-│ │ │
-├────────────────────────┼──────────────┐ │ (Cache Miss)
-▼ ▼ ▼ ▼
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────────┐
-│ Bigtable │ │ FFmpeg Task │ │ Google Cloud Storage│
-│(Video Metadata) │ │ Queue Workers │ │(Raw & Transcoded HLS│
-└─────────────────┘ └────────┬────────┘ │ Video Blobs) │
-│ └─────────────────────┘
-└────────────────────────┘
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  Search & Recs  │     │ Upload Service  │     │   Google CDN    │
+│    Services     │     │  (Chunked API)  │     │  (Edge Nodes)   │
+└────────┬────────┘     └────────┬────────┘     └────────┬────────┘
+         │                       │                       │
+         ▼                       ▼                       │ (Cache Miss)
+┌─────────────────┐     ┌─────────────────┐              │
+│    Bigtable     │     │   FFmpeg Task   │              │
+│(Video Metadata) │     │  Queue Workers  │              │
+└─────────────────┘     └────────┬────────┘              │
+                                 │                       ▼
+                                 │              ┌─────────────────────┐
+                                 └─────────────►│ Google Cloud Storage│
+                                                │(Raw & Transcoded HLS│
+                                                │    Video Blobs)     │
+                                                └─────────────────────┘
 (Writes Output Blobs)
 
 # 🌐 System Design: Case Studies
