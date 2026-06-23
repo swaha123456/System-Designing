@@ -8,6 +8,7 @@ A comprehensive foundational guide to core internet protocols, web communication
 
 TCP and UDP are the two primary foundational protocols operating at the **Transport Layer** (Layer 4 of the OSI model) used to route packets of data across networks.
 
+````text
 +-------------------------------------------------------------+
 | APPLICATION LAYER |
 | (HTTP, HTTPS, SMTP, FTP, DNS) |
@@ -66,6 +67,7 @@ The **"S"** stands for **Secure**. Standard HTTP transmits payloads across publi
 
 Traditional HTTP applications operate strictly on a unidirectional **Request-Response** cadence: the client makes a request, the server responds with a payload, and the underlying socket safely terminates. The server cannot independently push notifications to the client without an active client-driven inquiry.
 
+```text
 HTTP (Stateless / Unidirectional):
 Client ───Request───> Server
 Client <───Response─── Server (Connection Closes)
@@ -90,6 +92,7 @@ While WebSockets are exceptionally efficient for real-time text, JSON arrays, or
 ### WebRTC (Web Real-Time Communication)
 
 WebRTC is a framework designed for plugin-free, **Peer-to-Peer (P2P)** multimedia transmission natively executing directly between web browsers.
+```text
 
 Signaling Phase:
 [ Peer A ] <───(Find each other via Signaling/STUN)───> [ Peer B ]
@@ -107,3 +110,4 @@ For large-scale video broadcasting directed toward thousands or millions of conc
 - **Mechanics:** The source video asset is processed dynamically on a server, chopped into miniature, sequential files (ranging between 2 to 6 seconds long), and pre-encoded into multiple bitrate variants and resolution tiers (e.g., 360p, 720p, 1080p, 4K). The client-side player references a master playlist file (`.m3u8` or `.mpd`) and fetches individual video chunks sequentially using standard HTTP queries pulled directly from global **Content Delivery Network (CDN)** cache locations.
 - **Adaptive Bitrate Tuning:** If a user's network bandwidth suddenly drops, the client-side browser logic dynamically shifts down its requests to lower-resolution file paths on the fly, maintaining playback stability without crashing or triggering a hard buffering state.
 - **Primary Use Cases:** Subscription Video-On-Demand (VOD) frameworks, pre-recorded streaming, and mass entertainment broadcasts (e.g., Netflix, YouTube, Twitch streams).
+````

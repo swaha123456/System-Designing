@@ -13,17 +13,19 @@ Logs (Event Tracking): Text strings emitted when specific events happen inside t
 
 Alerting: If traffic suddenly drops by 80%, or if error rates spike past a standard threshold, the anomaly detection engine flags it immediately and pages the engineering team (via tools like PagerDuty or Slack alerts) before customers even realize something broke.
 
-┌────────────────────────┐ True ┌────────────────────────┐
+```text
+┌────────────────────────┐ True           ┌────────────────────────┐
 │ Metric crosses defined │ ─────────────► │ Trigger Severity Alert │
-│ operational threshold │ │ (PagerDuty / Slack) │
-└────────────────────────┘ └───────────┬────────────┘
-│ │
-│ False ▼
-▼ ┌────────────────────────┐
-┌────────────────────────┐ │ On-Call Engineer pages │
-│ Engine stays quiet; │ │ to fix the microservice│
-│ logs standard baseline │ │ before users notice. │
-└────────────────────────┘ └────────────────────────┘
+│ operational threshold  │                │ (PagerDuty / Slack)    │
+└────────────────────────┘                └───────────┬────────────┘
+            │                                         │
+            │ False                                   ▼
+            ▼                             ┌────────────────────────┐
+┌────────────────────────┐                │ On-Call Engineer pages │
+│ Engine stays quiet;    │                │ to fix the microservice│
+│ logs standard baseline │                │ before users notice.   │
+└────────────────────────┘                └────────────────────────┘
 
 - **Threshold Breeches:** If your production API error count crosses a configured threshold (e.g., spiking over `1%` of total traffic), or if network traffic suddenly drops by an unusual `80%` on a busy afternoon, the engine instantly flags the anomaly.
 - **Incident Paging:** The detection pipeline automatically packages the context data and routes high-priority pages to on-call engineers via developer operations communication hubs (like **PagerDuty**, **Opsgenie**, or dedicated **Slack webhooks**). This notifies the team to remediate the service health issues before customers face application failures.
+```

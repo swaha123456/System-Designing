@@ -2,9 +2,9 @@
 
 ## 📺 Case Study: YouTube’s Frontend Architecture
 
-> 📑 **Official Reference Document:** [Inside the Frontend Magic of YouTube by Harshit Singh on DEV Community](https://dev.to/wittedtech-by-harshit/inside-the-frontend-magic-of-youtube-a-deep-dive-into-the-architecture-powering-one-of-the-worlds-largest-platforms-119f)
+YouTube’s frontend is a massive feat of client-side engineering, architected to handle billions of users, deliver high-fidelity video interactions, and maintain strict performance metrics. To achieve this, YouTube relies on a **Hybrid SSR-SPA Topology** coupled with sophisticated edge and bundle optimizations.
 
-> YouTube’s frontend is a massive feat of client-side engineering, architected to handle billions of users, deliver high-fidelity video interactions, and maintain strict performance metrics. To achieve this, YouTube relies on a **Hybrid SSR-SPA Topology** coupled with sophisticated edge and bundle optimizations.
+> 📑 **Official Reference Document:** [Inside the Frontend Magic of YouTube by Harshit Singh on DEV Community](https://dev.to/wittedtech-by-harshit/inside-the-frontend-magic-of-youtube-a-deep-dive-into-the-architecture-powering-one-of-the-worlds-largest-platforms-119f)
 
 ---
 
@@ -19,19 +19,20 @@
 
 ---
 
-[Client (Web/Mobile)]
-|
-[API Gateway] --->
-|
-[Load Balancer] (Routes requests to nearest server)
-|
-[Server-Side Rendering] (Initial HTML Load for SEO & FCP)
-|
-[Client-Side SPA] (Subsequent in-app interactions)
-|
-[GraphQL/REST APIs] (Data fetching for recommendations, comments, etc.)
-|
-[Caching via Service Workers] (Cached assets, offline availability)
+```text
+             [Client (Web/Mobile)]
+                       |
+                [API Gateway] --->
+                       |
+            [Load Balancer] (Routes requests to nearest server)
+                       |
+            [Server-Side Rendering] (Initial HTML Load for SEO & FCP)
+                       |
+              [Client-Side SPA] (Subsequent in-app interactions)
+                       |
+          [GraphQL/REST APIs] (Data fetching for recommendations, comments, etc.)
+                       |
+         [Caching via Service Workers] (Cached assets, offline availability)
 
 ### 1. The Hybrid Architectural Mandate
 
@@ -122,3 +123,7 @@ Background Caching (Service Workers caching common assets offline)
 1. **React Server Components (RSC):** Transitioning toward modern RSC patterns would allow YouTube to run entire component logic layers exclusively on backend compute nodes, streaming UI data over the wire while stripping away hydration-heavy JavaScript libraries entirely from the client browser.
 2. **Browser-Side WebAssembly (Wasm):** Migrating heavy operations (such as multi-track real-time client-side web trimming, client video decoding overlays, or high-fidelity user animations) directly to WebAssembly to bypass Javascript runtime constraints and execute logic at near-native binary speeds.
 3. **Dynamic Edge Compute Customization:** Utilizing serverless CDN Edge Functions to perform complex runtime operations—such as geographical localization or immediate user AB-testing payload changes—directly at the edge closest to the user terminal, entirely unburdening central origin databases.
+
+
+
+```

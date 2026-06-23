@@ -47,6 +47,7 @@ When a single database table scales up to contain hundreds of millions of relati
 - **Data Partitioning** splits a single, massive logical table down into smaller, self-contained subset chunks (partitions) **inside the exact same database machine instance**.
 - _Horizontal Partitioning Example:_ An application might automatically segment a massive `orders` table by year boundaries:
 
+```text
                 ┌────────────────────────┐
                 │  Massive ORDERS Table  │
                 └───────────┬────────────┘
@@ -55,7 +56,7 @@ When a single database table scales up to contain hundreds of millions of relati
        ▼                    ▼                    ▼
 
   ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-  │ orders_2024 │ │ orders_2025 │ │ orders_2026 │
+  │ orders_2024     │ │ orders_2025     │ │ orders_2026     │
   └─────────────────┘ └─────────────────┘ └─────────────────┘
 
 - When a query hunts for a specific record with a timestamp filter matching `2026`, the query planner executes a **partition pruning** routine. It completely ignores historical chunks, cutting execution search paths down dramatically.
@@ -72,3 +73,4 @@ While local database partitioning divides data on a single machine, a data set c
   - `User IDs N-Z` ──► Directed exclusively to **Database Server 2**
 - _The Complexity:_ Sharding significantly increases application abstraction complexity. Join operations across different shards become incredibly expensive, and your backend software layer must always remain explicitly aware of which database machine holds a specific user record.
   > 📚 **Analogy:** If a comprehensive multi-volume encyclopedia set grows too large and heavy for a single physical wooden bookshelf to support without breaking, you place Volumes 1–10 on a shelf on the left wall, and Volumes 11–20 on a separate shelf on the right wall.
+```

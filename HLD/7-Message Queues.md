@@ -10,16 +10,18 @@ In a legacy **Synchronous Architecture**, process components execute in a blocki
 
 **Asynchronous Processing** explicitly decouples these operations:
 
-[Client] ──► [Checkout Service] ──(Fast Render)──► "Order Confirmed!"
-│
+```text
+
+   [Client] ──► [Checkout Service] ──(Fast Render)──► "Order Confirmed!"
+    │
 (Publish Message)
-▼
+    ▼
 ┌──────────────────┐
-│ MESSAGE QUEUE │
-└────────┬─────────┘
-│
-┌─────────┼─────────┐
-▼ ▼ ▼
+│ MESSAGE QUEUE    │
+└──────────────┬───┘
+               │
+┌──────────────┼─────────┐
+▼              ▼         ▼
 [Inventory] [Billing] [Notification] (Background Workers)
 
 The primary checkout application processes only the immediate mission-critical operations (e.g., verifying the payment intent) and drops an event token into a message broker. It returns an instantaneous success response to the client terminal, while independent background worker nodes pool and drain the message queue to process heavy computation paths at their own managed pace.
@@ -59,3 +61,4 @@ Consider a large-scale e-commerce architecture managing a checkout transaction s
    - The **Notification Service** consumes the event to compile and email a receipts package.
 
 All three systems process the exact same payload independently and concurrently, minimizing latency bottlenecks across the stack.
+```

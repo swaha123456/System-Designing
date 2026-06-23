@@ -19,8 +19,9 @@ When thousands of concurrent database client connections execute read and write 
 
 The industry establishes four standard **Isolation Levels**, managing a direct tradeoff between structural safety and raw execution performance:
 
-| Isolation Level      | Strictness   | Latency / Speed | Primary Data Phenomenon Prevented                                                                     |
-| :------------------- | :----------- | :-------------- | :---------------------------------------------------------------------------------------------------- |
+````text
+| Isolation Level      | Strictness    | Latency / Speed | Primary Data Phenomenon Prevented                                                                     |
+| :------------------- | :-----------  | :-------------- | :---------------------------------------------------------------------------------------------------- |
 | **Read Uncommitted** | 🛑 Weakest   | ⚡ Fastest      | None (Allows _Dirty Reads_ — reading uncommitted data that might rollback)                            |
 | **Read Committed**   | ⚠️ Moderate  | 🏃 Fast         | **Dirty Reads** (Only reads data that has completed its final commit phase)                           |
 | **Repeatable Read**  | 🛡️ Strong    | 🐢 Slower       | **Non-Repeatable Reads** (Ensures reading a row twice within one transaction yields identical states) |
@@ -42,6 +43,7 @@ In decentralized networks, physical network cords can get severed, routers can d
 
 Consequently, when a network partition event explicitly manifests, software engineers must make a binary design decision:
 
+```text
               ┌──────────────────────────────┐
               │   A Network Partition occurs │
               └──────────────┬───────────────┘
@@ -50,14 +52,15 @@ Consequently, when a network partition event explicitly manifests, software engi
      ▼ [Choose Consistency]                          ▼ [Choose Availability]
 
 ┌─────────────────────────────────┐ ┌─────────────────────────────────┐
-│ CP System (Drop Request) │ │ AP System (Return Old Data) │
+│ CP System (Drop Request)        │ │ AP System (Return Old Data)     │
 ├─────────────────────────────────┤ ├─────────────────────────────────┤
-│ Server rejects incoming read │ │ Server responds immediately │
+│ Server rejects incoming read    │ │ Server responds immediately     │
 │ requests until replication sync │ │ with stale/cached data to ensure│
-│ is perfectly restored. │ │ uninterrupted user runtime. │
+│ is perfectly restored.          │ │ uninterrupted user runtime.     │
 └─────────────────────────────────┘ └─────────────────────────────────┘
 
 - **CP (Consistency + Partition Tolerance):** You prioritize structural data perfection over operational uptime. If a partitioned secondary node cannot instantly reconcile state changes with the primary database master node, it deliberately fails incoming user requests and returns an error.
   - _Ideal Application:_ Banking systems, billing engines, and inventory reservation networks.
 - **AP (Availability + Partition Tolerance):** You prioritize system uptime over immediate data convergence. The system remains fully responsive to traffic, serving users whatever localized data state it currently holds, even if it is technically stale or out of sync.
   - _Ideal Application:_ Social media status feeds, streaming recommendation algorithms, and tracking telemetry.
+````
