@@ -11,19 +11,23 @@
          │ (Metadata/Search)      │ (Upload Video Chunks)  │ (Streaming Video Request)
          ▼                        ▼                        ▼
 
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│ Search & Recs │ │ Upload Service │ │ Google CDN │
-│ Services │ │ (Chunked API) │ │ (Edge Nodes) │
-└────────┬────────┘ └────────┬────────┘ └────────┬────────┘
-│ │ │
-├────────────────────────┼──────────────┐ │ (Cache Miss)
-▼ ▼ ▼ ▼
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────────┐
-│ Bigtable │ │ FFmpeg Task │ │ Google Cloud Storage│
-│(Video Metadata) │ │ Queue Workers │ │(Raw & Transcoded HLS│
-└─────────────────┘ └────────┬────────┘ │ Video Blobs) │
-│ └─────────────────────┘
-└────────────────────────┘
+````text
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  Search & Recs  │     │ Upload Service  │     │   Google CDN    │
+│    Services     │     │  (Chunked API)  │     │  (Edge Nodes)   │
+└────────┬────────┘     └────────┬────────┘     └────────┬────────┘
+         │                       │                       │
+         ▼                       ▼                       │ (Cache Miss)
+┌─────────────────┐     ┌─────────────────┐              │
+│    Bigtable     │     │   FFmpeg Task   │              │
+│(Video Metadata) │     │  Queue Workers  │              │
+└─────────────────┘     └────────┬────────┘              │
+                                 │                       ▼
+                                 │              ┌─────────────────────┐
+                                 └─────────────►│ Google Cloud Storage│
+                                                │(Raw & Transcoded HLS│
+                                                │    Video Blobs)     │
+                                                └─────────────────────┘
 (Writes Output Blobs)
 
 # 🌐 System Design: Case Studies
@@ -65,13 +69,13 @@ YouTube explicitly splits its state persistence engine into two isolated, micros
                                   │
      ┌────────────────────────────┴────────────────────────────┐
      ▼ [Object Storage Platform]                               ▼ [NoSQL Metadata Store]
-
+```text
 ┌─────────────────────────────────┐ ┌─────────────────────────────────┐
-│ Google Cloud Storage (GCS) │ │ Google Bigtable │
+│ Google Cloud Storage (GCS)      │ │ Google Bigtable                 │
 ├─────────────────────────────────┤ ├─────────────────────────────────┤
-│ Operates as an immutable blob │ │ Wide-column NoSQL engine driving│
+│ Operates as an immutable blob   │ │ Wide-column NoSQL engine driving│
 │ store housing binary streams of │ │ sub-millisecond, high-throughput│
-│ transcoded .ts / .mp4 chunks │ │ video titles, tags, and metrics │
+│ transcoded .ts / .mp4 chunks    │ │ video titles, tags, and metrics │
 └─────────────────────────────────┘ └─────────────────────────────────┘
 
 ##### A. Video Blob Storage (Google Cloud Storage - GCS)
@@ -108,3 +112,4 @@ YouTube explicitly splits its state persistence engine into two isolated, micros
 
 - **The Engineering Objective:** Acts as the central, reverse-proxy interface shielding internal microservice networks, exposing clean RESTful/gRPC interaction endpoints to millions of concurrent target clients (Web, iOS, Android, Smart TVs).
 - **Operational Framework:** Google's internal API Gateway tier manages centralized packet routing layer steps, decrypts incoming SSL certificates (**SSL Termination**), evaluates system-wide safety guardrails (**Rate Limiting**), and handles client validation hooks via stateful signature checks (**JWT Token Verification**).
+````
