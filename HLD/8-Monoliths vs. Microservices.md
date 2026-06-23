@@ -53,7 +53,7 @@ Phase 1: Monolith Only       Phase 2: Carving Off        Phase 3: Fully Strangle
                             ┌───────────────────────┐   │  │ Auth │   │Billing│ │
                             │   New Auth Service    │   │  └──────┘   └───────┘ │
                             └───────────────────────┘   └───────────────────────┘
-**` ``` `**
+```
 - **The Execution:** You construct a routing intermediary (like an API Gateway) in front of the application. One by one, you cut a specific domain out of the legacy monolith, rewrite it as an isolated microservice, and update the gateway to route traffic to the new service.
 - Over time, the monolith is progressively chipped away and shrunk down until it is entirely replaced—or "strangled"—by the new microservices architecture.
 
